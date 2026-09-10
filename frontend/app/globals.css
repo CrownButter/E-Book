@@ -2,6 +2,7 @@
 html, body { margin: 0; padding: 0; }
 body { font-family: Arial, Helvetica, sans-serif; background: #f6f7fb; color: #171717; }
 a { color: inherit; text-decoration: none; }
+button { font: inherit; }
 .container { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
 .header { background: #fff; border-bottom: 1px solid #e5e7eb; }
 .header-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; }
@@ -12,8 +13,28 @@ a { color: inherit; text-decoration: none; }
 .section { padding: 24px 0 64px; }
 .section h2 { margin: 0 0 20px; font-size: 28px; }
 .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-.book-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; min-height: 160px; }
+.book-card { display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; min-height: 160px; transition: border-color 0.15s, transform 0.15s; }
+.book-card:hover { border-color: #b8bec8; transform: translateY(-2px); }
 .book-card h3 { margin: 0 0 8px; }
 .book-card p { color: #666; line-height: 1.5; }
 .badge { display: inline-block; margin-top: 8px; padding: 6px 10px; border-radius: 999px; background: #eef2ff; font-size: 12px; }
+.book-detail { padding: 48px 0 80px; }
+.back-link { display: inline-block; margin-bottom: 32px; color: #5f6368; }
+.back-link:hover { color: #171717; }
+.book-detail-content { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start; }
+.book-cover { width: 280px; min-height: 390px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; color: #777; text-align: center; }
+.book-cover img { width: 100%; height: 100%; min-height: 390px; object-fit: cover; }
+.book-info h1 { margin: 16px 0 8px; font-size: 42px; line-height: 1.1; }
+.book-author { margin: 0 0 24px; color: #5f6368; font-size: 18px; }
+.book-description { max-width: 700px; margin: 0 0 28px; color: #444; font-size: 17px; line-height: 1.7; }
+.primary-button { border: 0; border-radius: 8px; padding: 11px 16px; background: #171717; color: #fff; cursor: pointer; }
+.primary-button:hover { background: #333; }
 .footer { padding: 24px 0 40px; color: #777; font-size: 14px; }
+@media (max-width: 700px) {
+  .hero { padding: 48px 0 32px; }
+  .hero h1 { font-size: 36px; }
+  .book-detail-content { grid-template-columns: 1fr; gap: 32px; }
+  .book-cover { width: 220px; min-height: 310px; }
+  .book-cover img { min-height: 310px; }
+  .book-info h1 { font-size: 34px; }
+}
