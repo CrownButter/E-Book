@@ -8,5 +8,10 @@ spring:
       ddl-auto: update
     open-in-view: false
 
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-this-development-secret-key-please}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
 server:
   port: 8080
