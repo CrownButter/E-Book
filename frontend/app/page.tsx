@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Book = {
   id: number;
   title: string;
@@ -53,12 +55,12 @@ export default async function Home() {
           ) : (
             <div className="book-grid">
               {books.map((book) => (
-                <article className="book-card" key={book.id}>
+                <Link href={`/books/${book.id}`} className="book-card" key={book.id}>
                   <h3>{book.title}</h3>
                   <div>{book.author ?? "Penulis belum tersedia"}</div>
                   <p>{book.description ?? "Belum ada deskripsi."}</p>
                   <span className="badge">Tersedia</span>
-                </article>
+                </Link>
               ))}
             </div>
           )}
