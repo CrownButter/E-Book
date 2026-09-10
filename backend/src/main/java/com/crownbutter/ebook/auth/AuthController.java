@@ -5,6 +5,7 @@ import com.crownbutter.ebook.user.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,8 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "id", savedUser.getId(),
-                "email", savedUser.getEmail()
+                "email", savedUser.getEmail(),
+                "role", savedUser.getRole().name()
         ));
     }
 
@@ -56,14 +58,33 @@ public class AuthController {
                     .body(Map.of("message", "Email atau password salah"));
         }
 
-        String token = jwtService.generateToken(user.getId(), user.getEmail());
+        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole());
 
         return ResponseEntity.ok(Map.of(
                 "token", token,
                 "user", Map.of(
                         "id", user.getId(),
-                        "email", user.getEmail()
+                        "email", user.getEmail(),
+                        "role", user.getRole().name()
                 )
+        ));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication authentication) {
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "User tidak ditemukan"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
+                "email", user.getEmail(),
+                "role", user.getRole().name()
         ));
     }
 }
