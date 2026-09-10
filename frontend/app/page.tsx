@@ -1,10 +1,32 @@
-const books = [
-  { title: "Contoh Buku Pertama", author: "Penulis", description: "Placeholder untuk katalog E-Book." },
-  { title: "Contoh Buku Kedua", author: "Penulis", description: "Nanti data ini akan berasal dari Spring Boot API." },
-  { title: "Contoh Buku Ketiga", author: "Penulis", description: "Fokus awal: katalog, library, dan reader." },
-];
+type Book = {
+  id: number;
+  title: string;
+  author: string | null;
+  description: string | null;
+  coverUrl: string | null;
+};
 
-export default function Home() {
+async function getBooks(): Promise<Book[]> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
+
+  try {
+    const response = await fetch(`${apiUrl}/api/books`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`);
+    }
+
+    return response.json();
+  } catch {
+    return [];
+  }
+}
+
+export default async function Home() {
+  const books = await getBooks();
+
   return (
     <>
       <header className="header">
@@ -25,16 +47,21 @@ export default function Home() {
 
         <section className="section">
           <h2>Buku pilihan</h2>
-          <div className="book-grid">
-            {books.map((book) => (
-              <article className="book-card" key={book.title}>
-                <h3>{book.title}</h3>
-                <div>{book.author}</div>
-                <p>{book.description}</p>
-                <span className="badge">Segera tersedia</span>
-              </article>
-            ))}
-          </div>
+
+          {books.length === 0 ? (
+            <p>Belum ada buku tersedia.</p>
+          ) : (
+            <div className="book-grid">
+              {books.map((book) => (
+                <article className="book-card" key={book.id}>
+                  <h3>{book.title}</h3>
+                  <div>{book.author ?? "Penulis belum tersedia"}</div>
+                  <p>{book.description ?? "Belum ada deskripsi."}</p>
+                  <span className="badge">Tersedia</span>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
       </main>
 
